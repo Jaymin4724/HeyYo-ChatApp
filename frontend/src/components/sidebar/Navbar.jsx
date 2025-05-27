@@ -34,15 +34,13 @@ const Navbar = ({
             : "flex-row items-center justify-between flex-grow"
         }`}
       >
-        <span
-          className={`inline-flex items-center justify-center rounded-full p-[2px] bg-gradient-to-t ${gradient}`}
-        >
+        <button className={`btn btn-circle btn-${actionColor} h-11 w-11`}>
           <img
-            src="https://i.pravatar.cc/40?img=3"
+            src="https://i.pravatar.cc/40?img=1"
             alt="Profile"
             className="w-10 h-10 rounded-full bg-base-100"
           />
-        </span>
+        </button>
         {!collapsed && (
           <h2
             className={`font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r ${gradient}`}

@@ -34,9 +34,25 @@ const MessageContainer = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-base-300 text-xl font-semibold">
-        To: {selectedContact.firstname} {selectedContact.lastname}{" "}
-        {selectedContact.username}
+      <div className="px-4 py-3 border-b border-base-300">
+        <div className="flex items-center gap-4">
+          <div className="avatar">
+            <div className="w-12 rounded-full">
+              <img
+                src={selectedContact.profilePic}
+                alt={`${selectedContact.firstname} ${selectedContact.lastname}`}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-semibold text-base">
+              {selectedContact.firstname} {selectedContact.lastname}
+            </span>
+            <span className="text-sm text-gray-500">
+              @{selectedContact.username}
+            </span>
+          </div>
+        </div>
       </div>
 
       <Messages messages={messages} currentUser="me" />
