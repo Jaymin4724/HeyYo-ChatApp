@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import InputCard from "../../components/sidebar/InputBox";
 
-const Login = () => {
+const LogIn = () => {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
@@ -14,6 +17,12 @@ const Login = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    navigate("/");
   };
 
   return (
@@ -55,17 +64,19 @@ const Login = () => {
             </span>
           </div>
 
-          <p>
+          <Link to="/signup">
             Don't have account?{" "}
             <span className="font-bold text-yellow-500 cursor-pointer">
               Signup
             </span>
-          </p>
-          <button className="btn btn-secondary">Let's Go !!</button>
+          </Link>
+          <button className="btn btn-secondary" onClick={handleSubmit}>
+            Let's Go !!
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LogIn;

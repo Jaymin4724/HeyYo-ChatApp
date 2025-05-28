@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import InputCard from "../../components/sidebar/InputBox";
+import useSignup from "../../hooks/useSignup.js";
 
-const Signup = () => {
+const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    firstname: "",
+    lastname: "",
     username: "",
     password: "",
     confirmPassword: "",
@@ -20,6 +21,12 @@ const Signup = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const { loading, signup } = useSignup();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await signup(formData);
   };
 
   return (
@@ -39,16 +46,16 @@ const Signup = () => {
           <div className="flex gap-3">
             <InputCard
               type="text"
-              name="firstName"
+              name="firstname"
               placeholder="First Name"
-              value={formData.firstName}
+              value={formData.firstname}
               onChange={handleChange}
             />
             <InputCard
               type="text"
-              name="lastName"
+              name="lastname"
               placeholder="Last Name"
-              value={formData.lastName}
+              value={formData.lastname}
               onChange={handleChange}
             />
           </div>
@@ -106,24 +113,30 @@ const Signup = () => {
             <option disabled value="">
               Select Gender
             </option>
-            <option>Male</option>
-            <option>Female</option>
-            <option>Other</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
           </select>
 
-          <p>
+          <Link to="/login">
             Already have an account?{" "}
             <span className="text-blue-400 cursor-pointer font-bold">
               Login
             </span>
-          </p>
+          </Link>
 
           {/* Submit Button */}
-          <button className="btn btn-primary">Sign Me Up !!</button>
+          <button
+            className="btn btn-primary"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            Sign Me Up !!
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default Signup;
+export default SignUp;

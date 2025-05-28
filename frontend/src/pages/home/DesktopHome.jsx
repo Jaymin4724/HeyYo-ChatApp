@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Navbar from "../../components/sidebar/Navbar.jsx";
 import ContactList from "../../components/sidebar/ContactList.jsx";
 import MessageContainer from "../../components/chat/MessageContainer.jsx";
+import LogoutButton from "../../components/logout/LogoutButton.jsx";
 
 const DesktopHome = () => {
   // Navbar
@@ -77,7 +78,7 @@ const DesktopHome = () => {
 
       {/* MessageContainer */}
       <motion.div
-        animate={{ width: isCollapsed ? "100%" : "100%" }}
+        animate={{ width: isCollapsed ? "100%" : "70%" }}
         transition={{ duration: 0.4 }}
         className="h-full bg-base-100 flex flex-col"
       >

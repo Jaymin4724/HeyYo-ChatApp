@@ -7,8 +7,8 @@ export const Signup = async (req, res) => {
     const { firstname, lastname, username, password, gender } = req.body;
 
     // VALIDATE INPUTS
-    if (!firstname || !lastname || !username || !password) {
-      return res.status(400).json({ message: "Please fill all fields" });
+    if (!firstname || !lastname || !username || !password || !gender) {
+      return res.status(400).json({ message: "Please fill in all fields" });
     }
 
     const user = await User.findOne({ username });

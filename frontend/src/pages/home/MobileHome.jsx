@@ -46,6 +46,7 @@ const MobileHome = () => {
   return (
     <div className="h-screen w-screen flex flex-col bg-base-100">
       {/* Navbar */}
+
       <div className="sticky top-0 z-10">
         <Navbar
           title="HeyYo"
