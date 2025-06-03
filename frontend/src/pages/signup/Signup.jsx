@@ -131,7 +131,11 @@ const SignUp = () => {
             onClick={handleSubmit}
             disabled={loading}
           >
-            Sign Me Up !!
+            {loading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              " Sign Me Up !!"
+            )}
           </button>
         </div>
       </div>

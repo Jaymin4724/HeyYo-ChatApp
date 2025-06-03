@@ -28,14 +28,22 @@ const LogoutButton = ({ inputColor }) => {
                 onClick={handleLogout}
                 disabled={loading}
               >
-                Yes
+                {loading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Yes"
+                )}
               </button>
               <button
                 className="btn btn-outline btn-md text-xl"
                 onClick={() => setShowConfirm(false)}
                 disabled={loading}
               >
-                Cancel
+                {loading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Cancel"
+                )}
               </button>
             </div>
           </div>

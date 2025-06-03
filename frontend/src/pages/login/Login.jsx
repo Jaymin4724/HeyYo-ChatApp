@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import InputCard from "../../components/sidebar/InputBox";
-
+import useLogin from "../../hooks/useLogin";
 const LogIn = () => {
   const navigate = useNavigate();
 
@@ -19,10 +19,10 @@ const LogIn = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const { loading, login } = useLogin();
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    navigate("/");
+    await login(formData);
   };
 
   return (
@@ -70,8 +70,16 @@ const LogIn = () => {
               Signup
             </span>
           </Link>
-          <button className="btn btn-secondary" onClick={handleSubmit}>
-            Let's Go !!
+          <button
+            className="btn btn-secondary"
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? (
+              <span className="loading loading-spinner"></span>
+            ) : (
+              "Let's Go !!"
+            )}
           </button>
         </div>
       </div>
