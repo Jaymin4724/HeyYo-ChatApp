@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import ContactCard from "./ContactCard.jsx";
 import InputBox from "./InputBox.jsx";
+import useGetContacts from "../../hooks/useGetContacts.js";
 
-const ContactList = ({
-  contacts,
-  searchText,
-  onSearchChange,
-  onContactClick,
-  inputColor,
-  className = "",
-}) => {
+const ContactList = ({ inputColor, className = "" }) => {
   const [Color, setColor] = useState(inputColor);
+  const { loading, contacts } = useGetContacts();
+  const [searchText, setSearchText] = useState("");
+
+  const onSearchChange = (e) => setSearchText(e.target.value);
+
+  const filteredContacts = contacts.filter((contact) => {
+    const search = searchText.toLowerCase();
+    return (
+      contact.firstname.toLowerCase().includes(search) ||
+      contact.lastname.toLowerCase().includes(search) ||
+      contact.username.toLowerCase().includes(search)
+    );
+  });
 
   return (
     <div className={`w-full ${className}`}>
@@ -25,13 +32,21 @@ const ContactList = ({
             inputColor={Color}
           />
         </div>
-        {contacts.map((contact) => (
-          <ContactCard
-            key={contact.id}
-            contact={contact}
-            onContactClick={(contact) => onContactClick(contact)}
-          />
-        ))}
+
+        {loading && <span className="loading loading-spinner"></span>}
+
+        {!loading && filteredContacts.length === 0 && (
+          <div className="text-center text-gray-400">No contacts found.</div>
+        )}
+
+        {!loading &&
+          filteredContacts.map((contact) => (
+            <ContactCard
+              key={contact._id}
+              contact={contact}
+              inputColor={Color}
+            />
+          ))}
       </ul>
     </div>
   );

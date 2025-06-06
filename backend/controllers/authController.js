@@ -23,9 +23,9 @@ export const Signup = async (req, res) => {
     // Generate a random profile picture URL based
     const profilePic =
       gender === "male"
-        ? "https://avatar.iran.liara.run/public/boy"
+        ? `https://avatar.iran.liara.run/public/boy?username=${username}`
         : gender === "female"
-        ? "https://avatar.iran.liara.run/public/girl"
+        ? `https://avatar.iran.liara.run/public/girl?username=${username}`
         : `https://avatar.iran.liara.run/username?username=${firstname}+${lastname}`;
 
     const newUser = new User({

@@ -1,32 +1,52 @@
 import InputBox from "../../components/sidebar/InputBox.jsx";
 import { Send } from "lucide-react";
+import useSendMessage from "../../hooks/useSendMessage.js";
 
 const colorClasses = {
   primary: "primary",
   secondary: "secondary",
 };
 
-const MessageSend = ({ messageText, onMessageChange, onSend, color }) => {
+const MessageSend = ({
+  messageText,
+  setMessageText,
+  handleMessageChange,
+  color = "primary",
+}) => {
   const inputClass = colorClasses[color] || colorClasses.primary;
+  const { loading, sendMessage } = useSendMessage();
+
   return (
-    <div className="flex justify-between gap-2 p-4 border-t border-base-300">
+    <form
+      className="flex justify-between gap-2 p-4 border-t border-base-300"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        await sendMessage(messageText);
+        setMessageText("");
+      }}
+    >
       <div className="flex-grow">
         <InputBox
           type="text"
           placeholder="Type a message..."
           name="message"
           value={messageText}
-          onChange={onMessageChange}
+          onChange={handleMessageChange}
           inputColor={inputClass}
         />
       </div>
       <button
-        onClick={onSend}
         className={`btn btn-circle btn-${inputClass} pr-[2px]`}
+        type="submit"
+        disabled={loading}
       >
-        <Send size={20} />
+        {loading ? (
+          <span className="loading loading-spinner"></span>
+        ) : (
+          <Send size={20} />
+        )}
       </button>
-    </div>
+    </form>
   );
 };
 

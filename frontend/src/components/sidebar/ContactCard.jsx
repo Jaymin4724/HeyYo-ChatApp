@@ -1,8 +1,22 @@
-import React from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import useContacts from "../../zustand/useContacts.js";
 
-const ContactCard = ({ contact, onContactClick }) => {
+const ContactCard = ({ contact, inputColor }) => {
+  const { authUser } = useContext(AuthContext);
+  const { selectedContact, setSelectedContact } = useContacts();
+  const colorClassMap = {
+    primary: "bg-primary",
+    secondary: "bg-secondary",
+  };
+  const isSelected = selectedContact?._id === contact._id;
   return (
-    <li className="my-2 cursor-pointer" onClick={() => onContactClick(contact)}>
+    <li
+      className={`my-2 cursor-pointer ${
+        isSelected ? `${colorClassMap[inputColor]}  rounded-lg mx-1` : ""
+      }`}
+      onClick={() => setSelectedContact(contact)}
+    >
       <div className="flex items-center gap-4">
         <div className="avatar avatar-online">
           <div className="w-12 rounded-full overflow-hidden">
@@ -13,7 +27,9 @@ const ContactCard = ({ contact, onContactClick }) => {
           </div>
         </div>
         <p className="text-[20px] font-extralight">
-          {contact.firstname} {contact.lastname}
+          {authUser.username === contact.username
+            ? "You"
+            : `${contact.firstname} ${contact.lastname}`}
           <span className="font-semibold text-white">
             {" "}
             {`(${contact.username})`}

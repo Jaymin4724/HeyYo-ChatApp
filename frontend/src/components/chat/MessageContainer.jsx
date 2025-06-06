@@ -1,17 +1,30 @@
 import { LucideMessagesSquare } from "lucide-react";
 import Messages from "./Messages";
 import MessageSend from "./MessageSend";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../context/authContext";
+import useContacts from "../../zustand/useContacts";
 
 const MessageContainer = ({
-  selectedContact,
-  messages,
   messageText,
-  onMessageChange,
-  onSend,
+  setMessageText,
+  handleMessageChange,
   color,
 }) => {
   const [Color, UserColor] = useState(color);
+  const { authUser } = useContext(AuthContext);
+  const {
+    selectedContact,
+    // setSelectedContact,
+  } = useContacts();
+
+  // useEffect(() => {
+  //    Cleanup Function
+  //   return () => {
+  //     setSelectedContact(null);
+  //   };
+  // }, []);
+
   if (!selectedContact) {
     return (
       <div className="flex flex-col justify-center items-center h-full text-center p-8 space-y-4">
@@ -22,7 +35,8 @@ const MessageContainer = ({
           </span>
         </h1>
         <p className="text-lg text-base-content/70">
-          Hello <b>Jaymin Dave</b>, <br />
+          Hello <b>{`${authUser.firstname} ${authUser.lastname}`}</b>
+          , <br />
           Select a chat from the left to start messaging.
         </p>
         <div>
@@ -55,12 +69,12 @@ const MessageContainer = ({
         </div>
       </div>
 
-      <Messages messages={messages} currentUser="me" />
+      <Messages currentUser={authUser._id} />
 
       <MessageSend
         messageText={messageText}
-        onMessageChange={onMessageChange}
-        onSend={onSend}
+        setMessageText={setMessageText}
+        handleMessageChange={handleMessageChange}
         color={Color}
       />
     </div>

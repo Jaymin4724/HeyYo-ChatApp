@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import { LogOut, LogIn, MessageSquare } from "lucide-react";
 import LogoutButton from "../../components/logout/LogoutButton.jsx";
+import { AuthContext } from "../../context/AuthContext.jsx";
 const Navbar = ({
   title,
   onButtonClick,
@@ -18,6 +20,7 @@ const Navbar = ({
         return <MessageSquare size={20} />;
     }
   };
+  const { authUser } = useContext(AuthContext);
 
   return (
     <div
@@ -37,8 +40,8 @@ const Navbar = ({
         <div className="flex gap-3 items-center">
           <button className={`btn btn-circle btn-${actionColor} h-11 w-11`}>
             <img
-              src="https://i.pravatar.cc/40?img=1"
-              alt="Profile"
+              src={authUser.profilePic}
+              alt="ProfilePic"
               className="w-10 h-10 rounded-full bg-base-100"
             />
           </button>

@@ -15,7 +15,7 @@ const getAllMessages = async (req, res) => {
     // populate is used to get the data of the messages from the message model
 
     if (!conversation) {
-      return res.status(404).json({ message: "Conversation not found" });
+      return res.status(200).json([]);
     }
     res.status(200).json(conversation.messages);
   } catch (error) {
