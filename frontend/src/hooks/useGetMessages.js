@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import useContacts from "../zustand/useContacts";
