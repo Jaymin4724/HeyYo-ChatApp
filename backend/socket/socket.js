@@ -11,7 +11,7 @@ const server = http.createServer(app);
 // Attach a Socket.IO server to the HTTP server
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000"],
+    origin: ["https://heyyo-chatapp.onrender.com", "http://localhost:3000"],
     methods: ["GET", "POST"],
   },
 });
