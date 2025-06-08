@@ -8,9 +8,9 @@ import ConnectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
-
+import { app, server } from "./socket/socket.js";
 // Variables
-const app = express();
+// const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -22,7 +22,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/messages", messageRoutes);
 
-app.listen(PORT, () => {
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 

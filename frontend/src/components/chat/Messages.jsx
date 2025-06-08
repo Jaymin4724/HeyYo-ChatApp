@@ -1,7 +1,9 @@
 import Message from "./Message.jsx";
 import useGetMessages from "../../hooks/useGetMessages.js";
 import useContacts from "../../zustand/useContacts.js";
+import useListenMessages from "../../hooks/useListenMessages.js";
 const Messages = () => {
+  useListenMessages();
   const { loading } = useGetMessages();
   const { messages } = useContacts();
   if (loading) {

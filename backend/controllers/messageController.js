@@ -1,25 +1,33 @@
 import Conversation from "../models/conversationModel.js";
 import Message from "../models/messageModel.js";
+import { io, getRecieverSocketId } from "../socket/socket.js";
 
 const getAllMessages = async (req, res) => {
   try {
     const { id: userToChat } = req.params;
-    // senderId is always the user who is logged in and userToChat is the user who is being chatted with
     const senderId = req.user._id;
 
-    const conversation = await Conversation.findOne({
-      participants: {
-        $all: [senderId, userToChat],
-      },
-    }).populate("messages");
-    // populate is used to get the data of the messages from the message model
+    let conversation;
+
+    if (senderId === userToChat) {
+      // Self-chat case
+      conversation = await Conversation.findOne({
+        participants: { $all: [senderId, senderId] },
+      }).populate("messages");
+    } else {
+      // Normal conversation
+      conversation = await Conversation.findOne({
+        participants: { $all: [senderId, userToChat] },
+      }).populate("messages");
+    }
 
     if (!conversation) {
       return res.status(200).json([]);
     }
+
     res.status(200).json(conversation.messages);
   } catch (error) {
-    console.error("Error in get all messages controller", error.message);
+    console.error("Error in getAllMessages controller:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -59,11 +67,13 @@ const sendMessage = async (req, res) => {
       conversation.messages.push(newMessage._id);
     }
 
-    //* SOCKET IO FUNCTIONALITY (soon)
-
     await conversation.save();
     // await newMessage.save(); here no need to save the message again because we are already saving it in the above line while creating the message, if we will save it again then it will create a duplicate message
 
+    const recieverSocketId = getRecieverSocketId(recieverId);
+    if (recieverSocketId) {
+      io.to(recieverSocketId).emit("newMessage", newMessage);
+    }
     res.status(200).json({ newMessage });
   } catch (error) {
     console.error("Error in send message controller", error.message);

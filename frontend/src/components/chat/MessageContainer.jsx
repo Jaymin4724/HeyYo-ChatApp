@@ -1,8 +1,9 @@
 import { LucideMessagesSquare } from "lucide-react";
 import Messages from "./Messages";
 import MessageSend from "./MessageSend";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../context/authContext";
+import { useContext, useState, useEffect } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { SocketContext } from "../../context/SocketContext.jsx";
 import useContacts from "../../zustand/useContacts";
 
 const MessageContainer = ({
@@ -13,17 +14,14 @@ const MessageContainer = ({
 }) => {
   const [Color, UserColor] = useState(color);
   const { authUser } = useContext(AuthContext);
-  const {
-    selectedContact,
-    // setSelectedContact,
-  } = useContacts();
+  const { onlineUsers } = useContext(SocketContext);
+  const { selectedContact } = useContacts();
+  const [isOnline, setIsOnline] = useState(false);
 
-  // useEffect(() => {
-  //    Cleanup Function
-  //   return () => {
-  //     setSelectedContact(null);
-  //   };
-  // }, []);
+  // Set isOnline true if selectedContact._id is in onlineUsers
+  useEffect(() => {
+    if (selectedContact) setIsOnline(onlineUsers.includes(selectedContact._id));
+  }, [onlineUsers, selectedContact]);
 
   if (!selectedContact) {
     return (
@@ -48,10 +46,14 @@ const MessageContainer = ({
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-4 py-3 border-b border-base-300">
+      <div className="px-4 py-2 border-b border-base-300">
         <div className="flex items-center gap-4">
-          <div className="avatar">
-            <div className="w-12 rounded-full">
+          <div
+            className={`bg-white rounded-3xl p-[2.5px] avatar ${
+              isOnline ? "avatar-online" : "avatar-offline"
+            }`}
+          >
+            <div className="w-8 rounded-full overflow-hidden">
               <img
                 src={selectedContact.profilePic}
                 alt={`${selectedContact.firstname} ${selectedContact.lastname}`}

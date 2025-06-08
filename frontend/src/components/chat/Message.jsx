@@ -14,21 +14,35 @@ const Message = ({ msg, isEmpty = false }) => {
     );
   }
 
-  const selfChat =
-    msg.senderId === authUser.id && msg.senderId === msg.recieverId;
-  const isFromSelf =
-    msg.senderId === authUser.id && msg.recieverId === selectedContact._id;
+  const isSelfChat = selectedContact._id === authUser.id;
+  const isSentByMe = msg.senderId === authUser.id;
+
+  // Alignment
+  const alignment = isSelfChat
+    ? "chat-end"
+    : isSentByMe
+    ? "chat-end"
+    : "chat-start";
+
+  // Bubble color
+  const bubbleColor = isSelfChat
+    ? "bg-purple-500 text-white" // same for all self-chat messages
+    : isSentByMe
+    ? "bg-blue-500 text-white"
+    : "bg-gray-300 text-black";
+
+  // Label
+  const senderLabel = "You"; // always "You" for self-chat or sent-by-me
+
+  const finalLabel =
+    isSelfChat || isSentByMe
+      ? "You"
+      : `${selectedContact.firstname} ${selectedContact.lastname}`;
 
   return (
-    <div
-      className={`chat ${selfChat || isFromSelf ? "chat-end" : "chat-start"}`}
-    >
-      <div className="chat-header text-left mb-1">
-        {selfChat || isFromSelf
-          ? "You"
-          : `${selectedContact.firstname} ${selectedContact.lastname}`}
-      </div>
-      <div className="chat-bubble">{msg.message}</div>
+    <div className={`chat ${alignment}`}>
+      <div className="chat-header text-left mb-1">{finalLabel}</div>
+      <div className={`chat-bubble ${bubbleColor}`}>{msg.message}</div>
       <time className="chat-footer text-[10px] text-left opacity-50 mt-1">
         {new Date(msg.createdAt).toLocaleTimeString()}
       </time>
