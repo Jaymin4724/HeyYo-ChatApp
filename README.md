@@ -16,6 +16,4 @@ HeyYo is a modern real-time chat application built with the MERN stack, providin
 - ⚙️ Global state management with Zustand
 - 🚨 Robust error handling (client and server-side)
 - 🧠 Clean and responsive UI with TailwindCSS and DaisyUI
-- 🚀 Production-ready deployment (Free hosting options)
-
-## 📂 Project Structure
+- 🚀 Production-ready deployment
