@@ -1,31 +1,21 @@
 import Conversation from "../models/conversationModel.js";
 import Message from "../models/messageModel.js";
-import { io, getRecieverSocketId } from "../socket/socket.js";
+import { io, getReceiverSocketId } from "../socket/socket.js";
 
 const getAllMessages = async (req, res) => {
   try {
-    const { id: userToChat } = req.params;
+    const { id: userToChatId } = req.params;
     const senderId = req.user._id;
 
-    let conversation;
+    const conversation = await Conversation.findOne({
+      participants: { $all: [senderId, userToChatId] },
+    }).populate("messages"); // NOT REFERENCE BUT ACTUAL MESSAGE
 
-    if (senderId === userToChat) {
-      // Self-chat case
-      conversation = await Conversation.findOne({
-        participants: { $all: [senderId, senderId] },
-      }).populate("messages");
-    } else {
-      // Normal conversation
-      conversation = await Conversation.findOne({
-        participants: { $all: [senderId, userToChat] },
-      }).populate("messages");
-    }
+    if (!conversation) return res.status(200).json([]);
 
-    if (!conversation) {
-      return res.status(200).json([]);
-    }
+    const messages = conversation.messages;
 
-    res.status(200).json(conversation.messages);
+    res.status(200).json(messages);
   } catch (error) {
     console.error("Error in getAllMessages controller:", error.message);
     res.status(500).json({ message: "Internal server error" });
@@ -35,46 +25,44 @@ const getAllMessages = async (req, res) => {
 const sendMessage = async (req, res) => {
   try {
     const { message } = req.body;
-    // this syntax is used to extract the id from the params of the request and rename it to recieverId
-    const { id: recieverId } = req.params;
-    // senderId is always the user who is logged in and recieverId is the user who is being chatted with
+    const { id: receiverId } = req.params;
     const senderId = req.user._id;
 
-    // this is used to find the conversation between the sender and the reciever
-    // we are saying find the conversation where participants are includes all these fields (senderId and recieverId)
     let conversation = await Conversation.findOne({
-      participants: {
-        $all: [senderId, recieverId],
-      },
+      participants: { $all: [senderId, receiverId] },
     });
 
-    // if conversation is not found then we are creating a new conversation
+  
     if (!conversation) {
-      const newConversation = await Conversation.create({
-        participants: [senderId, recieverId],
+      conversation = await Conversation.create({
+        participants: [senderId, receiverId],
       });
-      conversation = newConversation;
     }
 
-    const newMessage = await Message.create({
+    const newMessage = new Message({
       senderId,
-      recieverId,
+      receiverId,
       message,
     });
 
     if (newMessage) {
-      // store the message id in the conversation (because one conversation have many messages - check conversationModel.js)
       conversation.messages.push(newMessage._id);
     }
 
-    await conversation.save();
-    // await newMessage.save(); here no need to save the message again because we are already saving it in the above line while creating the message, if we will save it again then it will create a duplicate message
+    // await conversation.save();
+    // await newMessage.save();
 
-    const recieverSocketId = getRecieverSocketId(recieverId);
-    if (recieverSocketId) {
-      io.to(recieverSocketId).emit("newMessage", newMessage);
+    // this will run in parallel
+    await Promise.all([conversation.save(), newMessage.save()]);
+
+    // SOCKET IO FUNCTIONALITY WILL GO HERE
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      // io.to(<socket_id>).emit() used to send events to specific client
+      io.to(receiverSocketId).emit("newMessage", newMessage);
     }
-    res.status(200).json({ newMessage });
+
+    res.status(201).json({ newMessage });
   } catch (error) {
     console.error("Error in send message controller", error.message);
     res.status(500).json({ message: "Internal server error" });

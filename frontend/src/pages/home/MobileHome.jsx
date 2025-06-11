@@ -41,12 +41,14 @@ const MobileHome = () => {
           <ContactList inputColor="secondary" />
         </div>
       ) : (
-        <MessageContainer
-          messageText={messageText}
-          setMessageText={setMessageText}
-          handleMessageChange={handleMessageChange}
-          color="secondary"
-        />
+        <div className="flex-1 overflow-y-auto">
+          <MessageContainer
+            messageText={messageText}
+            setMessageText={setMessageText}
+            handleMessageChange={handleMessageChange}
+            color="secondary"
+          />
+        </div>
       )}
     </div>
   );

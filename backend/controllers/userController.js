@@ -8,7 +8,9 @@ const getAllUsers = async (req, res) => {
     // Here we are getting all the users except the currently logged-in user.
     // const allUsers = await User.find({ _id: { $ne: userId } });
     // However, because I want to keep an option to message ourselves, we will handle this differently below.
-    const allUsers = await User.find({}).select("-password");
+    const allUsers = await User.find({ _id: { $ne: userId } }).select(
+      "-password"
+    );
     // select("-password") simply means that the password field will be excluded from the returned user documents.
 
     if (!allUsers) {
