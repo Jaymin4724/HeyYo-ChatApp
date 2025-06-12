@@ -1,7 +1,8 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { LogOut, LogIn, MessageSquare } from "lucide-react";
 import LogoutButton from "../../components/logout/LogoutButton.jsx";
 import { AuthContext } from "../../context/AuthContext.jsx";
+import { SocketContext } from "../../context/SocketContext.jsx";
 const Navbar = ({
   title,
   onButtonClick,
@@ -22,6 +23,14 @@ const Navbar = ({
   };
   const { authUser } = useContext(AuthContext);
 
+  const { onlineUsers } = useContext(SocketContext);
+  const [isOnline, setIsOnline] = useState(false);
+
+  // Set isOnline true if selectedContact._id is in onlineUsers
+  useEffect(() => {
+    if (authUser) setIsOnline(onlineUsers.includes(authUser.id));
+  }, [onlineUsers]);
+
   return (
     <div
       className={`flex ${
@@ -38,13 +47,19 @@ const Navbar = ({
         }`}
       >
         <div className="flex gap-3 items-center">
-          <button className={`btn btn-circle btn-${actionColor} h-11 w-11`}>
-            <img
-              src={authUser.profilePic}
-              alt="ProfilePic"
-              className="w-10 h-10 rounded-full bg-base-100"
-            />
-          </button>
+          <div
+            className={`bg-white rounded-3xl p-[2px] avatar ${
+              isOnline ? "avatar-online" : "avatar-offline"
+            }`}
+          >
+            <button className={`btn btn-circle btn-${actionColor} h-11 w-11`}>
+              <img
+                src={authUser.profilePic}
+                alt="ProfilePic"
+                className="w-10 h-10 rounded-full bg-base-100"
+              />
+            </button>
+          </div>
           {!collapsed && (
             <h2
               className={`font-extrabold text-transparent text-2xl bg-clip-text bg-gradient-to-r ${gradient}`}

@@ -30,7 +30,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-w-96 mx-auto gap-4">
+    <div className="h-[90vh] flex flex-col items-center justify-center gap-4">
       <div className="text-center">
         <h1 className="font-bold text-3xl">
           Signup{" "}

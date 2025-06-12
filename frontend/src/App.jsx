@@ -10,7 +10,7 @@ import { AuthContext } from "./context/AuthContext.jsx";
 const App = () => {
   const { authUser } = useContext(AuthContext);
   return (
-    <div className="h-screen flex items-center justify-center">
+    <>
       <Routes>
         <Route
           path="/"
@@ -30,7 +30,7 @@ const App = () => {
         />
       </Routes>
       <Toaster></Toaster>
-    </div>
+    </>
   );
 };
 
