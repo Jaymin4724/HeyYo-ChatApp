@@ -11,8 +11,6 @@ const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     if (authUser) {
       localStorage.setItem("chat-user", JSON.stringify(authUser));
-    } else {
-      localStorage.removeItem("chat-user");
     }
   }, [authUser]);
   // This useEffect runs whenever 'authUser' changes.

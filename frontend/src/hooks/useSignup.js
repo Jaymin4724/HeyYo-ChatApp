@@ -43,7 +43,7 @@ const useSignup = () => {
       const res = await axios.post("/api/auth/signup", formData);
       toast.success("Signup successful!");
       console.log(res.data);
-      const userData = res.data;
+      const userData = res.data.user;
       localStorage.setItem("chat-user", JSON.stringify(userData));
       setAuthUser(userData);
       navigate("/");
