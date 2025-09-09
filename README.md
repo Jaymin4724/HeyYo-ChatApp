@@ -56,7 +56,7 @@ HeyYo-ChatApp/
 
 ### Environment Variables Setup
 
-Create a `.env` file inside the `backend` directory with the following content:
+Create a `.env` file inside the `root` directory with the following content:
 
 ```env
 PORT=5000
