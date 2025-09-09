@@ -54,6 +54,11 @@ HeyYo-ChatApp/
 - Node.js & npm
 - MongoDB
 
+### 1. Clone the repository
+```sh
+git clone https://github.com/Jaymin4724/HeyYo-ChatApp.git
+cd HeyYo-ChatApp
+```
 ### Environment Variables Setup
 
 Create a `.env` file inside the `root` directory with the following content:
@@ -63,12 +68,6 @@ PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 NODE_ENV=development
-```
-
-### 1. Clone the repository
-```sh
-git clone https://github.com/Jaymin4724/HeyYo-ChatApp.git
-cd HeyYo-ChatApp
 ```
 
 ### 2. Backend Setup
