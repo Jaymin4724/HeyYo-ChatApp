@@ -1,4 +1,4 @@
-# HeyYo 💬
+# HeyYo - A chatApp
 
 HeyYo is a modern real-time chat application built with the MERN stack, providing a secure and responsive messaging experience. It leverages Socket.io for instant communication, JWT for secure authentication, and Zustand for efficient global state management.
 
